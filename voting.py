@@ -5,8 +5,11 @@ from selenium.webdriver.support.ui import WebDriverWait
 import time
 import sys
 
+vote_url = 'http://www.reddit.com/r/programming/comments/xw4jg/some_performance_tweaks/c5q4dn4'
+vote_type = 'comment'
+vote_direction = 'up'
 
-class RedditSession:
+class RedditVotingSession:
 	def __init__ (self, url):
 		self.driver = webdriver.Firefox()
 		self.driver.get(url)
@@ -26,17 +29,41 @@ class RedditSession:
 		while True:
 			cookies = self.driver.get_cookies()
 			for cookie in cookies:
-				print ".",
-				sys.stdout.flush()
 				if cookie['name'] == u'reddit_session':
 					print "ok"
 					return True
-				time.sleep(1)
-				seconds += 1
-				if seconds >= 10:
-					print "couldn't log in!"
-					return False
+			print ".",	
+			sys.stdout.flush()
+			time.sleep(1)
+			seconds += 1
+			if seconds >= 10:
+				print "couldn't log in!"
+				return False
 		return False #never reached
+
+	def logout(self):
+		print "logging out ...",
+		logoutForm = self.driver.find_element_by_class_name("logout")
+		logoutForm.submit()
+		seconds = 0
+		while True:
+			print ".",
+			sys.stdout.flush()
+			stop = True
+			cookies = self.driver.get_cookies()
+			for cookie in cookies:
+				if cookie['name'] == u'reddit_session':
+					stop = False	
+			if stop:
+				break
+			time.sleep(1)
+			seconds += 1
+			if seconds > 10:
+				print "couldn't log out!"
+				return False
+		print "ok"
+		return True
+					
 
 	def is_upvoted(self, arrow_element):
 		""" checks if the backgreound sprite is the orange upvoted button
@@ -55,6 +82,7 @@ class RedditSession:
 			print "Already upvoted!"
 			return False
 		up_arrow.click()
+		time.sleep(1)
 		return True
 	
 	def upvote_comment(self, url):
@@ -66,6 +94,7 @@ class RedditSession:
 			print "Already upvoted!"
 			return False
 		up_arrow.click()
+		time.sleep(1)
 		return True
 
 	def is_downvoted(self, arrow_element):
@@ -84,6 +113,7 @@ class RedditSession:
 			print "Already downvoted!"
 			return False
 		down_arrow.click()
+		time.sleep(1)
 		return True
 
 	def downvote_comment(self, url):
@@ -95,30 +125,45 @@ class RedditSession:
 			print "Already downvoted!"
 			return False
 		down_arrow.click()
+		time.sleep(1)
 		return True
 	
 	def quit_browser(self):
 		self.driver.quit()
 
 def main():
-	credentials = open(".credentials", "r").read()
-	creds_arry = credentials.strip().split()
-	username = creds_arry[0]
-	password = creds_arry[1]
+	credentials = open(".credentials", "r").readlines()
+	accounts = []
+	for line in credentials:
+		creds_arry = line.strip().split()
+		if len(creds_arry) < 2:
+			continue
+		username = creds_arry[0]
+		password = creds_arry[1]
+		accounts.append({'username' : username, 'password' : password})
 	
-	rs = RedditSession("http://www.reddit.com")
-	success = rs.login(username, password)
-	if not success: 
-		print "login failed!"
-		return
-
-	success = rs.upvote_submission("http://www.reddit.com/r/apple/comments/xvbb1/conan_obriens_take_on_the_samsungapple_lawsuit/")
-	if not success:
-		print "submission vote failed"
-
-	success = rs.upvote_comment("http://www.reddit.com/r/worldnews/comments/xvllx/thousands_of_uk_workers_blacklisted_over/c5q02fb")
-	if not success:
-		print "comment vote failed"
+	rs = RedditVotingSession("http://www.reddit.com")
+	for account in accounts:
+		success = rs.login(account['username'], account['password'])
+		if not success: 
+			print "login failed for user: " + account['username']
+			continue
+		time.sleep(1)	
+		if vote_type == 'submission':
+			if vote_direction == 'up':
+				success = rs.upvote_submission(vote_url)
+			if vote_direction == 'down':
+				success = rs.downvote_submission(vote_url)
+		if vote_type == 'comment':
+			if vote_direction == 'up':
+				success == rs.upvote_comment(vote_url)
+			if vote_direction == 'down':
+				success == rs.downvote_comment(vote_url)
+		if success:
+			print "vote succeeded for user " + account['username']
+		else:
+			print "vote failed for user " + account['username']
+		rs.logout()
 
 if __name__ == "__main__":
 	main()
