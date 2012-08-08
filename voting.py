@@ -5,7 +5,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 import time
 import sys
 
-vote_url = 'http://www.reddit.com/r/programming/comments/xw4jg/some_performance_tweaks/c5q4dn4'
+vote_url = 'http://www.reddit.com/r/programming/comments/xw64t/gotye_parody_with_graph_theory_pathway_that_can/c5q3m2u'
 vote_type = 'comment'
 vote_direction = 'up'
 
@@ -82,7 +82,6 @@ class RedditVotingSession:
 			print "Already upvoted!"
 			return False
 		up_arrow.click()
-		time.sleep(1)
 		return True
 	
 	def upvote_comment(self, url):
@@ -94,7 +93,6 @@ class RedditVotingSession:
 			print "Already upvoted!"
 			return False
 		up_arrow.click()
-		time.sleep(1)
 		return True
 
 	def is_downvoted(self, arrow_element):
@@ -113,7 +111,6 @@ class RedditVotingSession:
 			print "Already downvoted!"
 			return False
 		down_arrow.click()
-		time.sleep(1)
 		return True
 
 	def downvote_comment(self, url):
@@ -125,7 +122,6 @@ class RedditVotingSession:
 			print "Already downvoted!"
 			return False
 		down_arrow.click()
-		time.sleep(1)
 		return True
 	
 	def quit_browser(self):
@@ -142,13 +138,12 @@ def main():
 		password = creds_arry[1]
 		accounts.append({'username' : username, 'password' : password})
 	
-	rs = RedditVotingSession("http://www.reddit.com")
 	for account in accounts:
+		rs = RedditVotingSession("http://www.reddit.com")
 		success = rs.login(account['username'], account['password'])
 		if not success: 
 			print "login failed for user: " + account['username']
 			continue
-		time.sleep(1)	
 		if vote_type == 'submission':
 			if vote_direction == 'up':
 				success = rs.upvote_submission(vote_url)
@@ -163,7 +158,10 @@ def main():
 			print "vote succeeded for user " + account['username']
 		else:
 			print "vote failed for user " + account['username']
-		rs.logout()
+		#rs.logout()
+		time.sleep(1) #give enough time for shit to settle down ...
+		rs.quit_browser()
+		#now it would be a good time to cycle your TOR ip :]
 
 if __name__ == "__main__":
 	main()
