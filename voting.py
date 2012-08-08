@@ -56,6 +56,17 @@ class RedditSession:
 			return False
 		up_arrow.click()
 		return True
+	
+	def upvote_comment(self, url):
+		""" upvotes a comment. url must be the 'permalink' comment url """
+		print "upvoting comment: " + url
+		self.driver.get(url)
+		up_arrow = self.driver.find_elements_by_class_name("arrow")[2] #first 2 arrows are for the submission
+		if self.is_upvoted(up_arrow):
+			print "Already upvoted!"
+			return False
+		up_arrow.click()
+		return True
 
 	def is_downvoted(self, arrow_element):
 		""" checks wether a given down arrow is 'clicked' """
@@ -69,6 +80,17 @@ class RedditSession:
 		print "downvoting submission: " + url
 		self.driver.get(url)
 		down_arrow = self.driver.find_elements_by_class_name("arrow")[1]
+		if self.is_downvoted(down_arrow):
+			print "Already downvoted!"
+			return False
+		down_arrow.click()
+		return True
+
+	def downvote_comment(self, url):
+		""" seel upvote comment """
+		print "downvoting comment: " + url
+		self.driver.get(url)
+		down_arrow = self.driver.find_elements_by_class_name("arrow")[3]
 		if self.is_downvoted(down_arrow):
 			print "Already downvoted!"
 			return False
@@ -90,11 +112,13 @@ def main():
 		print "login failed!"
 		return
 
-	success = rs.downvote_submission("http://www.reddit.com/r/apple/comments/xvbb1/conan_obriens_take_on_the_samsungapple_lawsuit/")
+	success = rs.upvote_submission("http://www.reddit.com/r/apple/comments/xvbb1/conan_obriens_take_on_the_samsungapple_lawsuit/")
 	if not success:
-		print "vote failed"
-		return
+		print "submission vote failed"
 
+	success = rs.upvote_comment("http://www.reddit.com/r/worldnews/comments/xvllx/thousands_of_uk_workers_blacklisted_over/c5q02fb")
+	if not success:
+		print "comment vote failed"
 
 if __name__ == "__main__":
 	main()
