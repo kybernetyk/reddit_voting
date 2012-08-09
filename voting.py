@@ -5,13 +5,35 @@ from selenium.webdriver.support.ui import WebDriverWait
 import time
 import sys
 
+#vote target
 vote_url = 'http://www.reddit.com/r/programming/comments/xw64t/gotye_parody_with_graph_theory_pathway_that_can/c5q3m2u'
 vote_type = 'comment'
 vote_direction = 'up'
 
+#proxy config 
+use_proxy = True
+PROXY_HOST = "localhost"
+PROXY_PORT = 9050
+
 class RedditVotingSession:
 	def __init__ (self, url):
-		self.driver = webdriver.Firefox()
+		fp = webdriver.FirefoxProfile()
+		if use_proxy:	
+			# Direct = 0, Manual = 1, PAC = 2, AUTODETECT = 4, SYSTEM = 5
+			fp.set_preference("network.proxy.type", 1)
+			#socks (tor) proxy:
+			fp.set_preference("network.proxy.socks", PROXY_HOST)
+			fp.set_preference("network.proxy.socks_port", PROXY_PORT)
+			""" use this for http proxy:
+			fp.set_preference("network.proxy.http", PROXY_HOST)
+			fp.set_preference("network.proxy.http_port", PROXY_PORT)
+			fp.set_preference("network.proxy.ftp", PROXY_HOST)
+			fp.set_preference("network.proxy.ftp_port", PROXY_PORT)
+			fp.set_preference("network.proxy.ssl", PROXY_HOST)
+			fp.set_preference("network.proxy.ssl_port", PROXY_PORT)
+			"""
+			fp.set_preference("network.proxy.no_proxies_on", "") 			
+		self.driver = webdriver.Firefox(fp)
 		self.driver.get(url)
 
 	def login(self, username, password):
