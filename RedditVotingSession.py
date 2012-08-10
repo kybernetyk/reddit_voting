@@ -5,25 +5,16 @@ from selenium.webdriver.support.ui import WebDriverWait
 import time
 import sys
 
-#vote target
-vote_url = 'http://www.reddit.com/r/programming/comments/xw64t/gotye_parody_with_graph_theory_pathway_that_can/c5q3m2u'
-vote_type = 'comment'
-vote_direction = 'up'
-
-#proxy config 
-use_proxy = True
-PROXY_HOST = "localhost"
-PROXY_PORT = 9050
-
 class RedditVotingSession:
-	def __init__ (self, url):
+	def __init__ (self, url, proxy = "", proxy_port = -1):
 		fp = webdriver.FirefoxProfile()
+		use_proxy = (len(proxy) > 0 and proxy_port != -1)
 		if use_proxy:	
 			# Direct = 0, Manual = 1, PAC = 2, AUTODETECT = 4, SYSTEM = 5
 			fp.set_preference("network.proxy.type", 1)
 			#socks (tor) proxy:
-			fp.set_preference("network.proxy.socks", PROXY_HOST)
-			fp.set_preference("network.proxy.socks_port", PROXY_PORT)
+			fp.set_preference("network.proxy.socks", proxy)
+			fp.set_preference("network.proxy.socks_port", proxy_port)
 			""" use this for http proxy:
 			fp.set_preference("network.proxy.http", PROXY_HOST)
 			fp.set_preference("network.proxy.http_port", PROXY_PORT)
@@ -34,6 +25,7 @@ class RedditVotingSession:
 			"""
 			fp.set_preference("network.proxy.no_proxies_on", "") 			
 		self.driver = webdriver.Firefox(fp)
+		self.driver.implicitly_wait(10)	#wait up to 10 seconds for dom objects to appear
 		self.driver.get(url)
 
 	def login(self, username, password):
@@ -148,42 +140,3 @@ class RedditVotingSession:
 	
 	def quit_browser(self):
 		self.driver.quit()
-
-def main():
-	credentials = open(".credentials", "r").readlines()
-	accounts = []
-	for line in credentials:
-		creds_arry = line.strip().split()
-		if len(creds_arry) < 2:
-			continue
-		username = creds_arry[0]
-		password = creds_arry[1]
-		accounts.append({'username' : username, 'password' : password})
-	
-	for account in accounts:
-		rs = RedditVotingSession("http://www.reddit.com")
-		success = rs.login(account['username'], account['password'])
-		if not success: 
-			print "login failed for user: " + account['username']
-			continue
-		if vote_type == 'submission':
-			if vote_direction == 'up':
-				success = rs.upvote_submission(vote_url)
-			if vote_direction == 'down':
-				success = rs.downvote_submission(vote_url)
-		if vote_type == 'comment':
-			if vote_direction == 'up':
-				success == rs.upvote_comment(vote_url)
-			if vote_direction == 'down':
-				success == rs.downvote_comment(vote_url)
-		if success:
-			print "vote succeeded for user " + account['username']
-		else:
-			print "vote failed for user " + account['username']
-		#rs.logout()
-		time.sleep(1) #give enough time for shit to settle down ...
-		rs.quit_browser()
-		#now it would be a good time to cycle your TOR ip :]
-
-if __name__ == "__main__":
-	main()
