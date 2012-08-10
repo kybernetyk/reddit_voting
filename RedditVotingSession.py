@@ -6,7 +6,7 @@ import time
 import sys
 
 class RedditVotingSession:
-	def __init__ (self, url, proxy = "", proxy_port = -1):
+	def __init__ (self, url, proxy="", proxy_port= -1):
 		fp = webdriver.FirefoxProfile()
 		use_proxy = (len(proxy) > 0 and proxy_port != -1)
 		if use_proxy:	
@@ -46,7 +46,7 @@ class RedditVotingSession:
 				if cookie['name'] == u'reddit_session':
 					print "ok"
 					return True
-			print ".",	
+			print ".", 	
 			sys.stdout.flush()
 			time.sleep(1)
 			seconds += 1

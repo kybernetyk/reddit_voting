@@ -1,8 +1,8 @@
 from selenium import webdriver
-import time
+#import time
 
 class RedditAccountCreator:
-    def __init__ (self, url, proxy = "", proxy_port = -1):
+    def __init__ (self, url, proxy="", proxy_port= -1):
         fp = webdriver.FirefoxProfile()
         use_proxy = (len(proxy) > 0 and proxy_port != -1)
         if use_proxy:    
@@ -23,3 +23,6 @@ class RedditAccountCreator:
         self.driver = webdriver.Firefox(fp)
         self.driver.implicitly_wait(10)    #wait up to 10 seconds for dom objects to appear
         self.driver.get(url)
+
+    def create_account(self, username, password, email):
+        pass
