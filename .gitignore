@@ -1,2 +1,5 @@
 .credentials
+.decaptcher
+captcha.png
+*.pyc
 .DS_Store
