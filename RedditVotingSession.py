@@ -1,4 +1,9 @@
 #!/usr/bin/env python
+"""
+(c) Leon Szpilewski, Licensed under GPL3
+http://github.com/jsz/
+"""
+
 from selenium import webdriver
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.support.ui import WebDriverWait

@@ -1,4 +1,9 @@
 #!/usr/bin/env python
+"""
+(c) Leon Szpilewski, Licensed under GPL3
+http://github.com/jsz/
+"""
+
 PROXY_HOST = "localhost"
 PROXY_PORT = 9050
 

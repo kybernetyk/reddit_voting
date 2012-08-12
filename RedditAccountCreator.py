@@ -1,3 +1,8 @@
+"""
+(c) Leon Szpilewski, Licensed under GPL3
+http://github.com/jsz/
+"""
+
 from selenium import webdriver
 from CaptchaSolver import CaptchaSolver
 import sys

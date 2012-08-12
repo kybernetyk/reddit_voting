@@ -1,12 +1,15 @@
 #!/bin/sh
 # this script will solve a captcha by using the decaptcher service 
-# more info: http://decaptcher.com/
+# more info: http://de-captcher.com/
 #
 # for this to work you have to create a file named '.decaptcher.
 # in the current directory and fill it with your decaptcher.com
 # username and password. seperate user and pass byt a whitespace
 # example:
 #   jack mypass\n
+#
+# (c) Leon Szpilewski, Licensed under GPL3
+# http://github.com/jsz/
 
 if [ ! -e ".decaptcher" ]
 then

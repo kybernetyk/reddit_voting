@@ -1,14 +1,24 @@
 #!/usr/bin/env python
+"""
+(c) Leon Szpilewski, Licensed under GPL3
+http://github.com/jsz/
+"""
+
 from RedditVotingSession import RedditVotingSession
 from TorCycler import TorCycler
 import time
 
 #vote target
+#the url of the comment/submission to vote on. (you can get this by copying the 'permalink' link from reddit)
 vote_url = 'http://www.reddit.com/r/mac/comments/y27yl/using_ipad_2_as_primary_monitor/c5ro16c'
+
+#valid values: 'comment', 'submission'
 vote_type = 'comment'
+
+#valid values: 'up', 'down'
 vote_direction = 'down'
 
-#proxy config
+#proxy config (this is a SOCKS proxy)
 PROXY_HOST = "localhost"
 PROXY_PORT = 9050
 

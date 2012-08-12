@@ -1,3 +1,8 @@
+"""
+(c) Leon Szpilewski, Licensed under GPL3
+http://github.com/jsz/
+"""
+
 import time
 import subprocess
 
