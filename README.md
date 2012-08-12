@@ -2,7 +2,7 @@
 Let's have fun with reddit :3
 
 
-Dependencies: selenium webdriver, running tor @ localhost:9050
+Dependencies: python 2.7, selenium webdriver, firefox, running tor @ localhost:9050
 
     pip install selenium
 
