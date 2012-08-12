@@ -25,6 +25,6 @@ fi
 _user=`awk <.decaptcher '{print $1}'`
 _pass=`awk <.decaptcher '{print $2}'` 
 
-curl -o captcha.png $1  
-curl -F "function=picture2" -F "username=$_user" -F "password=$_pass" -F "pict=@captcha.png" -F "pict_to=0" -F "pict_type=0" http://poster.de-captcher.com/ |awk 'BEGIN {FS="|"}; {print $6}'
+curl -S -o captcha.png $1  
+curl -S -F "function=picture2" -F "username=$_user" -F "password=$_pass" -F "pict=@captcha.png" -F "pict_to=0" -F "pict_type=0" http://poster.de-captcher.com/ |awk 'BEGIN {FS="|"}; {print $6}'
 

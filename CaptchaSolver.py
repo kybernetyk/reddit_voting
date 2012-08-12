@@ -1,6 +1,8 @@
 import time
 import subprocess
 
+#TODO: make this fly without the shell script ...
+
 class CaptchaSolver:
 	def __init__ (self):
 		pass

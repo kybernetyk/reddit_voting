@@ -2,4 +2,5 @@
 .decaptcher
 captcha.png
 *.pyc
+*.txt
 .DS_Store

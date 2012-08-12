@@ -47,11 +47,16 @@ class RedditAccountCreator:
 		reglink = self.driver.find_element_by_link_text('login or register')
 		reglink.click()
 		cap_image = self.driver.find_element_by_class_name('capimage')
+		seconds = 0
 		while True:
 			cap_url = cap_image.get_attribute('src')
 			if not 'kill.png' in cap_url:
 				break
 			time.sleep(1)
+			seconds += 1
+			if seconds > 15:
+				print "Captcha Image retrieve timeout ..."
+				return False
 		print "captcha image url: " + cap_url 
 		solver = CaptchaSolver()
 		solved_captcha = solver.solve_from_url(cap_url)
@@ -63,7 +68,7 @@ class RedditAccountCreator:
 		button = self.driver.find_element_by_class_name('button')
 		button.click()
 		print "checking for errors:"
-		time.sleep(2)
+		time.sleep(5)
 		if self.did_errors_occur():
 			print "errors occured ..."
 			return False
@@ -79,10 +84,13 @@ class RedditAccountCreator:
 			sys.stdout.flush()
 			time.sleep(1)
 			seconds += 1
-			if seconds >= 10:
+			if seconds >= 25:
 				print "couldn't create account!"
 				return False
 		return False #never reached
+	
+	def quit_browser(self):
+		self.driver.quit()
 
 def main():
     pass

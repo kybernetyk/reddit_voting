@@ -1,10 +1,12 @@
+#!/usr/bin/env python
 from RedditVotingSession import RedditVotingSession
+from TorCycler import TorCycler
 import time
 
 #vote target
-vote_url = 'http://www.reddit.com/r/programming/comments/xw64t/gotye_parody_with_graph_theory_pathway_that_can/c5q3m2u'
+vote_url = 'http://www.reddit.com/r/mac/comments/y27yl/using_ipad_2_as_primary_monitor/c5ro16c'
 vote_type = 'comment'
-vote_direction = 'up'
+vote_direction = 'down'
 
 #proxy config
 PROXY_HOST = "localhost"
@@ -21,8 +23,9 @@ def main():
         username = creds_arry[0]
         password = creds_arry[1]
         accounts.append({'username' : username, 'password' : password})
-    
+    tor_cycler = TorCycler() 
     for account in accounts:
+        tor_cycler.cycle()
         rs = RedditVotingSession("http://www.reddit.com")
         success = rs.login(account['username'], account['password'])
         if not success: 
