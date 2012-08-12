@@ -21,7 +21,7 @@ See more inside captcha_solver.sh
 
 == Account Creator Script ==
 ----------------------------
-run ./creator_test.py to create some accounts. this script needs a list of <username> <password>\n accounts to create in a file called tocreate.txt
+run ./creator_test.py to create some accounts. this script needs a list of "username password\n" accounts to create in a file called tocreate.txt
 
 == Voting Script ==
 -------------------
