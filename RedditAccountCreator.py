@@ -33,13 +33,17 @@ class RedditAccountCreator:
 		self.driver.get(url)
 
 	def did_errors_occur(self):
-		errors = self.driver.find_elements_by_class_name('error')
-		found_err = False
-		for error in errors:
-			if len(error.text):
-				print "error: " + error.text 
-				found_err = True
-		return found_err
+		try:
+			errors = self.driver.find_elements_by_class_name('error')
+			found_err = False
+			for error in errors:
+				if len(error.text):
+					print "error: " + error.text 
+					found_err = True
+			return found_err
+		except:
+			return True
+		return False
 
 	
 	def set_field_with_id_to_value(self, field_id, value):
